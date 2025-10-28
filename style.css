@@ -1,0 +1,71 @@
+:root {
+  --text-color: #fff;
+  --magenta: #ff00c8; 
+  --bg: #000;
+  --overlay-shadow: 0 0 28px rgba(255,255,255,0.14);
+  --btn-bg: rgba(255,255,255,0.04);
+}
+
+/* Reset */
+* { box-sizing: border-box; margin:0; padding:0; }
+
+html, body {
+  height:100%; 
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--text-color);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+}
+
+/* DedSec font */
+.font-loaded body, .font-loaded #main-title {
+  font-family: 'DedSec', monospace;
+}
+
+/* Video container */
+#video-root { position:fixed; inset:0; z-index:0; overflow:hidden; background:black; }
+#player { position:absolute; top:50%; left:50%; width:120%; height:120%; transform:translate(-50%,-50%); pointer-events:none; }
+
+/* Overlay text */
+.overlay {
+  position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:2; pointer-events:none;
+}
+#main-title {
+  font-size: clamp(28px,6vw,96px);
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color: var(--text-color);
+  text-shadow: 0 0 18px rgba(255,255,255,0.12), 2px 0 var(--magenta);
+  animation: subtle-glitch 3s infinite linear;
+}
+
+/* Subtle glitch animation */
+@keyframes subtle-glitch {
+  0% { text-shadow: 2px 0 var(--magenta); }
+  25% { text-shadow: -2px 0 var(--magenta); }
+  50% { text-shadow: 2px 0 var(--magenta); }
+  75% { text-shadow: -1px 0 var(--magenta); }
+  100% { text-shadow: 2px 0 var(--magenta); }
+}
+
+/* Fallback UI */
+.fallback {
+  position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(180deg,rgba(0,0,0,0.45),rgba(0,0,0,0.7));
+  z-index:5;
+}
+.fallback.hidden { display:none; }
+.fallback-card {
+  background:rgba(0,0,0,0.82);
+  border:1px solid rgba(255,255,255,0.04);
+  padding:20px;
+  border-radius:8px;
+  text-align:center;
+  min-width:260px;
+  color:var(--text-color);
+}
+.fallback p { margin:0 0 12px 0; color:#fff; }
+.btn { display:inline-block; padding:10px 14px; border-radius:6px; background:var(--btn-bg); color:var(--text-color); text-decoration:none; border:1px solid rgba(255,255,255,0.04); margin:6px; cursor:pointer; }
+.btn.subtle { opacity:0.7; }
+
+@media (max-width:640px) { #main-title{ font-size:28px; letter-spacing:2px; } }

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wassup</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background Video -->
+  <div id="video-root">
+    <div id="player"></div>
+  </div>
+
+  <!-- Overlay Text -->
+  <div class="overlay">
+    <h1 id="main-title">hacked by zys</h1>
+  </div>
+
+  <!-- Fallback if embed blocked -->
+  <div id="fallback" class="fallback hidden" role="dialog" aria-hidden="true">
+    <div class="fallback-card">
+      <p>Video cannot be embedded — open on YouTube.</p>
+      <div class="buttons">
+        <a id="open-youtube" class="btn" target="_blank" rel="noopener">Open on YouTube</a>
+        <button id="dismiss" class="btn subtle">Dismiss</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const VIDEO_ID = 'scyA9cnbja4';
+    const YT_URL = 'https://www.youtube.com/watch?v=' + VIDEO_ID;
+
+    // Load DedSec font dynamically
+    (async function loadFont() {
+      try {
+        const font = new FontFace('DedSec', 'url(HACKED.ttf)');
+        await font.load();
+        document.fonts.add(font);
+        document.documentElement.classList.add('font-loaded');
+        console.log('DedSec font loaded');
+      } catch (err) {
+        document.documentElement.classList.add('font-failed');
+        console.warn('DedSec font failed to load, using fallback.');
+      }
+    })();
+
+    // YouTube API
+    let tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(tag);
+
+    let player;
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        videoId: VIDEO_ID,
+        playerVars: {
+          autoplay:1,
+          controls:0,
+          loop:1,
+          playlist:VIDEO_ID,
+          modestbranding:1,
+          rel:0,
+          showinfo:0,
+          iv_load_policy:3
+        },
+        events: {
+          onReady: evt => {
+            evt.target.mute();         // mute the video
+            evt.target.playVideo();    // autoplay muted
+          },
+          onError: () => showFallback()
+        }
+      });
+    }
+
+    // Fallback logic
+    const fallbackEl = document.getElementById('fallback');
+    const openBtn = document.getElementById('open-youtube');
+    const dismissBtn = document.getElementById('dismiss');
+    openBtn.href = YT_URL;
+    openBtn.addEventListener('click', () => hideFallback());
+    dismissBtn.addEventListener('click', () => hideFallback());
+
+    function showFallback() {
+      fallbackEl.classList.remove('hidden');
+      fallbackEl.setAttribute('aria-hidden','false');
+    }
+    function hideFallback() {
+      fallbackEl.classList.add('hidden');
+      fallbackEl.setAttribute('aria-hidden','true');
+    }
+
+    setTimeout(() => { if (!window.YT || !YT.Player) showFallback(); }, 3000);
+  </script>
+</body>
+</html>
